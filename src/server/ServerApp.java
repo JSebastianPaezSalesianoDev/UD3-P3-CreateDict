@@ -1,6 +1,8 @@
 package server;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -19,6 +21,8 @@ public class ServerApp {
             Socket clientSocket = serverSocket.accept();
 
             DataOutputStream clientOutputStream = new DataOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
+            DataInputStream clientInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+            String name = clientInputStream.readUTF();
         }
         
     }
