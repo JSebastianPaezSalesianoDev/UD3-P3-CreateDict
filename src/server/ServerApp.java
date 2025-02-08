@@ -4,11 +4,13 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import server.threads.DictionaryClientHandler;
 import utils.Constanst;
 
 public class ServerApp {
@@ -19,34 +21,16 @@ public class ServerApp {
         System.out.println("Servidor levantado en el puerto: " + Constanst.SERVER_PORT);
 
         while (true) {
+            System.out.println("Esperando conexión de cliente...");
             Socket clientSocket = serverSocket.accept();
 
-            DataOutputStream clientOutputStream = new DataOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
             DataInputStream clientInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
-
             String name = clientInputStream.readUTF();
             System.out.println("Cliente conectado: " + name);
 
-            int option = clientInputStream.readInt();
 
-            if (option == 1) {
-                // Buscar palabra
-                String word = clientInputStream.readUTF();
-                String meaning = dictionary.getOrDefault(word, "Palabra no encontrada en el diccionario.");
-                clientOutputStream.writeUTF(meaning);
-                clientOutputStream.flush();
-            } else if (option == 2) {
-                // Agregar palabra
-                String word = clientInputStream.readUTF();
-                String meaning = clientInputStream.readUTF();
-                dictionary.put(word, meaning);
-                clientOutputStream.writeUTF("Palabra agregada correctamente.");
-                clientOutputStream.flush();
-            }
-
-            clientOutputStream.close();
-            clientInputStream.close();
-            clientSocket.close();
+            DictionaryClientHandler clientHandler = new DictionaryClientHandler(clientSocket, name, dictionary);
+            clientHandler.start();
         }
     }
 }

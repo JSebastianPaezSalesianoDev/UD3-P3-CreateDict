@@ -7,7 +7,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.Map;
 
-public class DictionaryClientHandler extends Thread{
+public class DictionaryClientHandler extends Thread {
 
     private DataInputStream clientInputStream;
     private DataOutputStream clientOutputStream;
@@ -20,6 +20,7 @@ public class DictionaryClientHandler extends Thread{
         this.name = name;
         this.dictionary = dictionary;
     }
+
     @Override
     public void run() {
         try {
