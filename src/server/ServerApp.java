@@ -9,6 +9,7 @@ import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
+import server.threads.DictionaryClientHandler;
 import utils.Constanst;
 
 public class ServerApp {
@@ -27,26 +28,8 @@ public class ServerApp {
             String name = clientInputStream.readUTF();
             System.out.println("Cliente conectado: " + name);
 
-            int option = clientInputStream.readInt();
-
-            if (option == 1) {
-                // Buscar palabra
-                String word = clientInputStream.readUTF();
-                String meaning = dictionary.getOrDefault(word, "Palabra no encontrada en el diccionario.");
-                clientOutputStream.writeUTF(meaning);
-                clientOutputStream.flush();
-            } else if (option == 2) {
-                // Agregar palabra
-                String word = clientInputStream.readUTF();
-                String meaning = clientInputStream.readUTF();
-                dictionary.put(word, meaning);
-                clientOutputStream.writeUTF("Palabra agregada correctamente.");
-                clientOutputStream.flush();
-            }
-
-            clientOutputStream.close();
-            clientInputStream.close();
-            clientSocket.close();
+            // Crear un nuevo hilo para manejar al cliente
+            new DictionaryClientHandler(clientSocket, name, dictionary).start();
         }
     }
 }
