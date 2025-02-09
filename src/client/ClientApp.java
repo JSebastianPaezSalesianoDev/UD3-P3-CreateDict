@@ -8,6 +8,7 @@ import java.net.Socket;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import client.thread.ServerListener;
 import utils.Constanst;
 
 
@@ -21,6 +22,9 @@ public class ClientApp {
         Socket socket = new Socket("localhost", Constanst.SERVER_PORT);
         DataOutputStream outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
         DataInputStream inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+
+        ServerListener serverListener = new ServerListener(inputStream);
+        serverListener.start();
 
         outputStream.writeUTF(name);
         outputStream.flush();
@@ -54,6 +58,7 @@ public class ClientApp {
                 outputStream.writeUTF(word);
                 outputStream.flush();
 
+
                 String meaning = inputStream.readUTF();
                 System.out.println("Significado: " + meaning);
 
@@ -65,12 +70,22 @@ public class ClientApp {
                 System.out.print("-> ");
                 String meaning = scanner.nextLine();
 
+            } else if (option == 2) {
+                System.out.println("Ingresa la palabra a agregar:");
+                System.out.print("-> ");
+                String word = scanner.nextLine();
+                System.out.println("Ingresa el significado:");
+                System.out.print("-> ");
+                String meaning = scanner.nextLine();
+
+
                 outputStream.writeUTF(word);
                 outputStream.writeUTF(meaning);
                 outputStream.flush();
 
                 String response = inputStream.readUTF();
                 System.out.println(response);
+
 
             } else if (option == 3) {
                 System.out.println("Saliendo del diccionario.");
