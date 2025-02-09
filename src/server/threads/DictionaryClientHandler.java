@@ -28,14 +28,12 @@ public class DictionaryClientHandler extends Thread {
                 int option = clientInputStream.readInt();
 
                 if (option == 1) {
-                 
                     String word = clientInputStream.readUTF();
                     String meaning = dictionary.getOrDefault(word, "Palabra no encontrada en el diccionario.");
                     clientOutputStream.writeUTF(meaning);
                     clientOutputStream.flush();
 
                 } else if (option == 2) {
-                    
                     String word = clientInputStream.readUTF();
                     String meaning = clientInputStream.readUTF();
                     dictionary.put(word, meaning);
@@ -53,13 +51,13 @@ public class DictionaryClientHandler extends Thread {
         } catch (SocketException se) {
             System.out.println("Conexión cerrada con cliente " + this.name + ".");
         } catch (IOException ioe) {
-            System.out.println("Error de cliente " + this.name );
+            System.out.println("Error de cliente " + this.name);
         } finally {
             try {
                 clientInputStream.close();
                 clientOutputStream.close();
             } catch (IOException e) {
-                System.err.println("Error ");
+                System.err.println("Error al cerrar los flujos.");
             }
         }
     }

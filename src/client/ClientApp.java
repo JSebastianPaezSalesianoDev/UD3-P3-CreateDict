@@ -11,7 +11,6 @@ import java.util.Scanner;
 import client.thread.ServerListener;
 import utils.Constanst;
 
-
 public class ClientApp {
 
     public static void main(String[] args) throws Exception {
@@ -58,10 +57,6 @@ public class ClientApp {
                 outputStream.writeUTF(word);
                 outputStream.flush();
 
-
-                String meaning = inputStream.readUTF();
-                System.out.println("Significado: " + meaning);
-
             } else if (option == 2) {
                 System.out.println("Ingresa la palabra a agregar:");
                 System.out.print("-> ");
@@ -69,23 +64,10 @@ public class ClientApp {
                 System.out.println("Ingresa el significado:");
                 System.out.print("-> ");
                 String meaning = scanner.nextLine();
-
-            } else if (option == 2) {
-                System.out.println("Ingresa la palabra a agregar:");
-                System.out.print("-> ");
-                String word = scanner.nextLine();
-                System.out.println("Ingresa el significado:");
-                System.out.print("-> ");
-                String meaning = scanner.nextLine();
-
 
                 outputStream.writeUTF(word);
                 outputStream.writeUTF(meaning);
                 outputStream.flush();
-
-                String response = inputStream.readUTF();
-                System.out.println(response);
-
 
             } else if (option == 3) {
                 System.out.println("Saliendo del diccionario.");
@@ -94,7 +76,6 @@ public class ClientApp {
                 System.out.println("Opción inválida.");
             }
         }
-
 
         outputStream.close();
         inputStream.close();

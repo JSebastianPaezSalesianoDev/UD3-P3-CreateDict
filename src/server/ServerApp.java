@@ -4,7 +4,6 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
@@ -21,16 +20,16 @@ public class ServerApp {
         System.out.println("Servidor levantado en el puerto: " + Constanst.SERVER_PORT);
 
         while (true) {
-            System.out.println("Esperando conexión de cliente...");
             Socket clientSocket = serverSocket.accept();
 
+            DataOutputStream clientOutputStream = new DataOutputStream(new BufferedOutputStream(clientSocket.getOutputStream()));
             DataInputStream clientInputStream = new DataInputStream(new BufferedInputStream(clientSocket.getInputStream()));
+
             String name = clientInputStream.readUTF();
             System.out.println("Cliente conectado: " + name);
 
-
-            DictionaryClientHandler clientHandler = new DictionaryClientHandler(clientSocket, name, dictionary);
-            clientHandler.start();
+     
+            new DictionaryClientHandler(clientSocket, name, dictionary).start();
         }
     }
 }
